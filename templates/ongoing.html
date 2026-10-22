@@ -1,0 +1,177 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4 mb-5">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h1 class="fw-bold">Ongoing Construction Projects</h1>
+            <p class="text-muted">
+                Track our active construction projects and their locations.
+            </p>
+        </div>
+
+        <a href="{{ url_for('add_project') }}" class="btn btn-primary">
+            + Add Project
+        </a>
+    </div>
+
+    <!-- PROJECT COUNT -->
+    <div class="alert alert-info">
+        <strong>{{ projects|length }}</strong>
+        ongoing project(s) found.
+    </div>
+
+    <!-- PROJECT CARDS -->
+    <div class="row g-4">
+
+        {% for project in projects %}
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card h-100 shadow-sm border-0">
+
+                <!-- PROJECT IMAGE -->
+                {% if project.image_url %}
+                    <img
+                        src="{{ project.image_url }}"
+                        class="card-img-top"
+                        alt="{{ project.project_name }}"
+                        style="height: 230px; object-fit: cover;"
+                        onerror="this.style.display='none';"
+                    >
+                {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center"
+                         style="height: 230px;">
+                        <div class="text-center text-muted">
+                            <div style="font-size: 45px;">🏗️</div>
+                            <p class="mb-0">Project image not added</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- PROJECT DETAILS -->
+                <div class="card-body d-flex flex-column">
+
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                        <h5 class="card-title fw-bold mb-0">
+                            {{ project.project_name }}
+                        </h5>
+
+                        <span class="badge bg-warning text-dark">
+                            Ongoing
+                        </span>
+                    </div>
+
+                    {% if project.project_type %}
+                        <p class="text-muted small mb-2">
+                            {{ project.project_type }}
+                        </p>
+                    {% endif %}
+
+                    <p class="card-text">
+                        {{ project.description or "No project description available." }}
+                    </p>
+
+                    <!-- LOCATION AND GOOGLE MAPS -->
+                    <div class="mb-3">
+                        <strong>📍 Project Location</strong>
+
+                        {% if project.location %}
+                            <p class="text-muted mb-2">
+                                {{ project.location }}
+                            </p>
+
+                            <a
+                                href="https://www.google.com/maps/search/?api=1&query={{ project.location | urlencode }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn btn-outline-primary btn-sm"
+                            >
+                                Open Location in Google Maps ↗
+                            </a>
+                        {% else %}
+                            <p class="text-muted small mb-0">
+                                Location not added yet.
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <hr>
+
+                    <!-- AREA AND COST -->
+                    <div class="row g-2 mb-3">
+
+                        <div class="col-6">
+                            <small class="text-muted">Built-up Area</small>
+                            <div class="fw-semibold">
+                                {{ "{:,.2f}".format(project.area_sqft or 0) }}
+                                sq.ft
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <small class="text-muted">Project Cost</small>
+                            <div class="fw-semibold">
+                                ₹{{ "{:,.2f}".format(project.total_cost or 0) }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- EDIT PROJECT -->
+                    <div class="mt-auto">
+                        <a
+                            href="{{ url_for('edit_project', project_id=project.id) }}"
+                            class="btn btn-primary w-100"
+                        >
+                            Edit Project
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <!-- NO PROJECTS -->
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-5">
+                    <div style="font-size: 55px;">🏗️</div>
+
+                    <h4 class="mt-3">No Ongoing Projects</h4>
+
+                    <p class="text-muted">
+                        Add a construction project and set its status to
+                        <strong>Ongoing</strong> to display it here.
+                    </p>
+
+                    <a href="{{ url_for('add_project') }}"
+                       class="btn btn-primary">
+                        + Add Your First Project
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- BACK TO DASHBOARD -->
+    <div class="mt-4">
+        <a href="{{ url_for('dashboard') }}"
+           class="btn btn-outline-secondary">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

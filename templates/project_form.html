@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2>
+                {% if project %}
+                    Edit Project
+                {% else %}
+                    Add New Project
+                {% endif %}
+            </h2>
+
+            <p class="text-muted">
+                Enter your construction project details.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('projects') }}"
+            class="btn btn-secondary"
+        >
+            ← Back to Projects
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                <!-- PROJECT NAME -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Project Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        name="project_name"
+                        class="form-control"
+                        placeholder="Example: Green Valley Apartment"
+                        value="{{ project.project_name if project else '' }}"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Project Location
+                    </label>
+
+                    <input
+                        type="text"
+                        name="location"
+                        class="form-control"
+                        placeholder="Example: Bangalore, Karnataka"
+                        value="{{ project.location if project else '' }}"
+                    >
+
+                </div>
+
+
+                <!-- PROJECT TYPE -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Project Type
+                    </label>
+
+                    <select
+                        name="project_type"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            Select Project Type
+                        </option>
+
+                        <option
+                            value="Residential"
+                            {% if project and project.project_type == "Residential" %}
+                                selected
+                            {% endif %}
+                        >
+                            Residential
+                        </option>
+
+                        <option
+                            value="Commercial"
+                            {% if project and project.project_type == "Commercial" %}
+                                selected
+                            {% endif %}
+                        >
+                            Commercial
+                        </option>
+
+                        <option
+                            value="Apartment"
+                            {% if project and project.project_type == "Apartment" %}
+                                selected
+                            {% endif %}
+                        >
+                            Apartment
+                        </option>
+
+                        <option
+                            value="Villa"
+                            {% if project and project.project_type == "Villa" %}
+                                selected
+                            {% endif %}
+                        >
+                            Villa
+                        </option>
+
+                        <option
+                            value="Industrial"
+                            {% if project and project.project_type == "Industrial" %}
+                                selected
+                            {% endif %}
+                        >
+                            Industrial
+                        </option>
+
+                        <option
+                            value="Other"
+                            {% if project and project.project_type == "Other" %}
+                                selected
+                            {% endif %}
+                        >
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Project Status
+                    </label>
+
+                    <select
+                        name="status"
+                        class="form-select"
+                    >
+
+                        <option
+                            value="Completed"
+                            {% if not project or project.status == "Completed" %}
+                                selected
+                            {% endif %}
+                        >
+                            Completed
+                        </option>
+
+                        <option
+                            value="Ongoing"
+                            {% if project and project.status == "Ongoing" %}
+                                selected
+                            {% endif %}
+                        >
+                            Ongoing
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- AREA -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Area (Square Feet)
+                    </label>
+
+                    <input
+                        type="number"
+                        name="area_sqft"
+                        id="area_sqft"
+                        class="form-control"
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 2500"
+                        value="{{ project.area_sqft if project else '' }}"
+                    >
+
+                </div>
+
+
+                <!-- COST -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Cost Per Square Feet (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        name="cost_per_sqft"
+                        id="cost_per_sqft"
+                        class="form-control"
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 2200"
+                        value="{{ project.cost_per_sqft if project else '' }}"
+                    >
+
+                </div>
+
+
+                <!-- TOTAL COST PREVIEW -->
+
+                <div class="alert alert-info">
+
+                    <strong>
+                        Estimated Total Cost:
+                    </strong>
+
+                    ₹
+
+                    <span id="total_cost">
+                        {% if project %}
+                            {{ "%.2f"|format(project.total_cost or 0) }}
+                        {% else %}
+                            0.00
+                        {% endif %}
+                    </span>
+
+                </div>
+
+
+                <!-- IMAGE URL -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Project Image URL
+                    </label>
+
+                    <input
+                        type="url"
+                        name="image_url"
+                        class="form-control"
+                        placeholder="https://example.com/project.jpg"
+                        value="{{ project.image_url if project else '' }}"
+                    >
+
+                    <small class="text-muted">
+                        You can add an image URL now.
+                        We can add Supabase image upload later.
+                    </small>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Project Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        class="form-control"
+                        rows="5"
+                        placeholder="Describe the construction project..."
+                    >{{ project.description if project else '' }}</textarea>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="d-flex gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+
+                        {% if project %}
+                            Update Project
+                        {% else %}
+                            Add Project
+                        {% endif %}
+
+                    </button>
+
+                    <a
+                        href="{{ url_for('projects') }}"
+                        class="btn btn-secondary"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function calculateTotal() {
+
+    const area =
+        parseFloat(
+            document.getElementById("area_sqft").value
+        ) || 0;
+
+    const cost =
+        parseFloat(
+            document.getElementById("cost_per_sqft").value
+        ) || 0;
+
+    const total = area * cost;
+
+    document.getElementById("total_cost").innerText =
+        total.toLocaleString(
+            "en-IN",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+}
+
+
+document
+    .getElementById("area_sqft")
+    .addEventListener(
+        "input",
+        calculateTotal
+    );
+
+
+document
+    .getElementById("cost_per_sqft")
+    .addEventListener(
+        "input",
+        calculateTotal
+    );
+
+</script>
+
+{% endblock %}

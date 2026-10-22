@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Materials{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <span class="eyebrow">PRICING</span>
+    <h1>Construction Materials</h1>
+    <p>Use this page for cement, steel, bricks, sand and other material pricing.</p>
+</section>
+
+<div class="content-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Material</th>
+                <th>Unit</th>
+                <th>Example Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Cement</td><td>Bag</td><td>₹ —</td></tr>
+            <tr><td>Steel</td><td>Kg</td><td>₹ —</td></tr>
+            <tr><td>Sand</td><td>Ton</td><td>₹ —</td></tr>
+            <tr><td>Bricks</td><td>Piece</td><td>₹ —</td></tr>
+        </tbody>
+    </table>
+    <p class="note">These are placeholders. We will connect this page to your Supabase materials table next.</p>
+</div>
+{% endblock %}

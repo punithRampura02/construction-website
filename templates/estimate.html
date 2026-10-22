@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Cost Estimate{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <span class="eyebrow">CALCULATOR</span>
+    <h1>Construction Cost Estimator</h1>
+    <p>Estimate the approximate material and labour cost.</p>
+</section>
+
+<div class="estimate-layout">
+    <form class="content-card" method="POST">
+        <label>Construction Area (sq. ft.)</label>
+        <input type="number" name="area_sqft" step="0.01" min="0" placeholder="Example: 2000" required>
+
+        <label>Material Cost / sq. ft. (₹)</label>
+        <input type="number" name="cost_per_sqft" step="0.01" min="0" placeholder="Example: 1800" required>
+
+        <label>Labour Cost / sq. ft. (₹)</label>
+        <input type="number" name="labour_per_sqft" step="0.01" min="0" placeholder="Example: 500" required>
+
+        <button type="submit">Calculate Estimate</button>
+    </form>
+
+    {% if result %}
+    <div class="result-card">
+        <h2>Estimated Cost</h2>
+        <p>Area: <strong>{{ result.area }} sq. ft.</strong></p>
+        <p>Material Cost: <strong>₹{{ "{:,.2f}".format(result.material_cost) }}</strong></p>
+        <p>Labour Cost: <strong>₹{{ "{:,.2f}".format(result.labour_cost) }}</strong></p>
+        <hr>
+        <h3>Total: ₹{{ "{:,.2f}".format(result.total_cost) }}</h3>
+        <small>This is an approximate estimate, not a final quotation.</small>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

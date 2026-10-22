@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Customer Registration</title>
+</head>
+<body>
+    <h2>Create Customer Account</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+        <label>Username</label><br>
+        <input name="username" maxlength="100" required><br><br>
+
+        <label>Password (minimum 8 characters)</label><br>
+        <input type="password" name="password"
+               minlength="8" required><br><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <p>
+        Already registered?
+        <a href="{{ url_for('login', account_type='customer') }}">
+            Customer Login
+        </a>
+    </p>
+</body>
+</html>

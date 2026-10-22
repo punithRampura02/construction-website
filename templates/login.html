@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ account_type|title }} Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            width: 340px;
+            max-width: 85%;
+            border-radius: 12px;
+        }
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin: 8px 0 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            color: white;
+            background: #172554;
+            border: 0;
+            cursor: pointer;
+        }
+        .message { margin: 10px 0; color: #b91c1c; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>{{ account_type|title }} Login</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+        <label>Username</label>
+        <input name="username" required autocomplete="username">
+
+        <label>Password</label>
+        <input type="password" name="password"
+               required autocomplete="current-password">
+
+        <button type="submit">
+            Login as {{ account_type|title }}
+        </button>
+    </form>
+
+    {% if account_type == 'customer' %}
+        <p>
+            New customer?
+            <a href="{{ url_for('customer_register') }}">Register</a>
+        </p>
+    {% endif %}
+
+    <p><a href="{{ url_for('index') }}">Back to home</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,190 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- DASHBOARD HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1>Construction Dashboard</h1>
+            <p class="text-muted">
+                Welcome, {{ session.username }}
+            </p>
+        </div>
+
+        <a href="{{ url_for('add_project') }}"
+           class="btn btn-primary">
+            + Add Project
+        </a>
+    </div>
+
+    <!-- STATISTICS -->
+    <div class="row g-4 mb-4">
+
+        <!-- TOTAL PROJECTS -->
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Projects</h6>
+                    <h2>{{ total_projects }}</h2>
+                    <a href="{{ url_for('projects') }}"
+                       class="text-decoration-none">
+                        View all projects
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPLETED PROJECTS -->
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Completed</h6>
+                    <h2>{{ completed_projects }}</h2>
+                    <span class="badge bg-success">Completed projects</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ONGOING PROJECTS -->
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Ongoing</h6>
+                    <h2>{{ ongoing_projects }}</h2>
+                    <a href="{{ url_for('ongoing') }}"
+                       class="text-decoration-none">
+                        View ongoing projects
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOTAL AREA -->
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Area</h6>
+                    <h2>{{ "{:,.0f}".format(total_area or 0) }}</h2>
+                    <small>sq.ft</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TOTAL PROJECT VALUE -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Total Project Value</h5>
+            <h2>₹{{ "{:,.2f}".format(total_value or 0) }}</h2>
+        </div>
+    </div>
+
+    <!-- RECENT PROJECTS -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <h4>Recent Projects</h4>
+
+                <a href="{{ url_for('projects') }}"
+                   class="btn btn-sm btn-outline-primary">
+                    View All
+                </a>
+            </div>
+
+            {% if recent_projects %}
+
+            <div class="table-responsive mt-3">
+                <table class="table table-hover align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Total Cost</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for project in recent_projects %}
+                        <tr>
+
+                            <!-- PROJECT NAME -->
+                            <td>
+                                <strong>{{ project.project_name }}</strong>
+                            </td>
+
+                            <!-- CLICKABLE GOOGLE MAPS LOCATION -->
+                            <td>
+                                {% if project.location %}
+                                <a
+                                    href="https://www.google.com/maps/search/?api=1&query={{ project.location|urlencode }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-primary text-decoration-none"
+                                    title="Open project location in Google Maps"
+                                >
+                                    📍 {{ project.location }}
+                                    <small class="d-block">
+                                        View on Google Maps ↗
+                                    </small>
+                                </a>
+                                {% else %}
+                                <span class="text-muted">
+                                    Location not added
+                                </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- PROJECT STATUS -->
+                            <td>
+                                {% if project.status == "Ongoing" %}
+                                <span class="badge bg-warning text-dark">
+                                    Ongoing
+                                </span>
+                                {% elif project.status == "Completed" %}
+                                <span class="badge bg-success">
+                                    Completed
+                                </span>
+                                {% else %}
+                                <span class="badge bg-secondary">
+                                    {{ project.status or "Not specified" }}
+                                </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- TOTAL COST -->
+                            <td>
+                                ₹{{ "{:,.2f}".format(project.total_cost or 0) }}
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+            {% else %}
+
+            <div class="text-center text-muted py-4">
+                <p>No projects added yet.</p>
+                <a href="{{ url_for('add_project') }}"
+                   class="btn btn-primary">
+                    Add Your First Project
+                </a>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

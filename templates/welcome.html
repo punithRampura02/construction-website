@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Construction Company</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #172554;
+            text-align: center;
+        }
+        header {
+            background: #172554;
+            color: white;
+            padding: 22px;
+            font-size: 23px;
+            font-weight: bold;
+        }
+        main { padding: 80px 20px; }
+        h1 { font-size: 42px; }
+        p { line-height: 1.7; color: #475569; }
+        .buttons { margin-top: 30px; }
+        a {
+            display: inline-block;
+            padding: 14px 24px;
+            margin: 8px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            background: #ea580c;
+            font-weight: bold;
+        }
+        .admin { background: #172554; }
+    </style>
+</head>
+<body>
+<header>YOUR CONSTRUCTION COMPANY</header>
+<main>
+    <h1>Building Your Dreams</h1>
+    <p>
+        Quality construction, trusted service, and projects built to last.
+        <br>
+        Sign in to explore our construction projects.
+    </p>
+
+    <div class="buttons">
+        <a href="{{ url_for('login', account_type='customer') }}">
+            Customer Login
+        </a>
+
+        <a class="admin"
+           href="{{ url_for('login', account_type='admin') }}">
+            Admin Login
+        </a>
+    </div>
+
+    <p>
+        New customer?
+        <a href="{{ url_for('customer_register') }}">
+            Register here
+        </a>
+    </p>
+</main>
+</body>
+</html>

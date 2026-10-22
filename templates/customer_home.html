@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Our Construction Projects</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8fafc;
+            color: #172554;
+        }
+        nav {
+            background: #172554;
+            color: white;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        nav a { color: white; margin-left: 12px; }
+        .hero {
+            background: #e2e8f0;
+            padding: 55px 7%;
+        }
+        .hero h1 { font-size: 40px; }
+        section { padding: 30px 7%; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px #00000012;
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .content { padding: 18px; }
+        .content p { line-height: 1.5; }
+        .map {
+            display: inline-block;
+            padding: 10px 12px;
+            background: #172554;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .empty { color: #64748b; }
+        #contact { background: #172554; color: white; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <strong>YOUR CONSTRUCTION COMPANY</strong>
+    <div>
+        Welcome, {{ session.get('username', 'Customer') }}
+        <a href="#completed">Completed</a>
+        <a href="#ongoing">Ongoing</a>
+        <a href="#contact">Contact</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<header class="hero">
+    <h1>Building Your Dreams</h1>
+    <p>
+        We provide reliable construction services with a focus on quality,
+        safety, and customer satisfaction. Explore our completed projects
+        and the projects currently in progress.
+    </p>
+</header>
+
+<section id="completed">
+    <h2>Completed Projects</h2>
+
+    {% if completed_projects %}
+    <div class="grid">
+        {% for project in completed_projects %}
+        <article class="card">
+            {% if project.image_url %}
+            <img src="{{ project.image_url }}"
+                 alt="{{ project.project_name }}">
+            {% endif %}
+
+            <div class="content">
+                <h3>{{ project.project_name }}</h3>
+                <p>{{ project.project_type or 'Construction Project' }}</p>
+                <p>{{ project.description or '' }}</p>
+
+                {% if project.location %}
+                <p><strong>Location:</strong> {{ project.location }}</p>
+                <a class="map" target="_blank"
+                   rel="noopener noreferrer"
+                   href="https://www.google.com/maps/search/?api=1&query={{ project.location|urlencode }}">
+                    View on Google Maps
+                </a>
+                {% endif %}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">No completed projects are available yet.</p>
+    {% endif %}
+</section>
+
+<section id="ongoing">
+    <h2>Ongoing Projects</h2>
+
+    {% if ongoing_projects %}
+    <div class="grid">
+        {% for project in ongoing_projects %}
+        <article class="card">
+            {% if project.image_url %}
+            <img src="{{ project.image_url }}"
+                 alt="{{ project.project_name }}">
+            {% endif %}
+
+            <div class="content">
+                <h3>{{ project.project_name }}</h3>
+                <p>{{ project.project_type or 'Construction Project' }}</p>
+                <p>{{ project.description or 'Work in progress.' }}</p>
+
+                {% if project.location %}
+                <p><strong>Location:</strong> {{ project.location }}</p>
+                <a class="map" target="_blank"
+                   rel="noopener noreferrer"
+                   href="https://www.google.com/maps/search/?api=1&query={{ project.location|urlencode }}">
+                    View on Google Maps
+                </a>
+                {% endif %}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">No ongoing projects are available right now.</p>
+    {% endif %}
+</section>
+
+<section id="contact">
+    <h2>Contact Us</h2>
+    <p>Have a construction project in mind? Contact our team.</p>
+
+    <!-- Replace these with your real company details. -->
+    <p>Phone: 9071945231</p>
+    <p>Email: punithrmp2@gmail.com</p>
+    <p>Office:rajaji nagar</p>
+</section>
+
+</body>
+</html>
